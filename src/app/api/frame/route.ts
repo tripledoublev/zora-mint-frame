@@ -52,10 +52,10 @@ export async function POST(req: NextRequest): Promise<Response> {
     console.log(buttonIndex);
     console.log(body.untrustedData);
     // Use buttonIndex to determine the response
-    if (buttonIndex == '1') {
+   /*  if (buttonIndex == '1') {
       // If buttonIndex is 1, perform the redirect
       return NextResponse.redirect(`${SITE_URL}/redirect`, { status: 302 });
-    } else {
+    } else { */
 
     // Check if frame request is valid
     const status = await validateFrameRequest(body.trustedData?.messageBytes);
@@ -126,7 +126,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
 
     return getResponse(ResponseType.SUCCESS);
-  }
+  
   } catch (error) {
     console.error(error);
     return getResponse(ResponseType.ERROR);
@@ -149,7 +149,7 @@ function getResponse(type: ResponseType) {
     <meta property="fc:frame:post_url" content="${SITE_URL}/api/frame" />
     ${
       shouldRetry
-        ? `<meta property="fc:frame:button:1" content="Try again" /><meta property="fc:frame:button:2" content="Mint on Zora" /><meta property="fc:frame:button:2:action" content="post_redirect" />`
+        ? `<meta property="fc:frame:button:1" content="Try again" />`
         : ''
     }
   </head></html>`);
