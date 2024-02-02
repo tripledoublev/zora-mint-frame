@@ -50,6 +50,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     // Now, extract the buttonIndex from untrustedData
     const buttonIndex = untrustedData ? untrustedData.buttonIndex : null;
     console.log(buttonIndex);
+    console.log(body.untrustedData);
     // Use buttonIndex to determine the response
     if (buttonIndex === 1) {
       // If buttonIndex is 1, perform the redirect
