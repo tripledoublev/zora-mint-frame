@@ -1,35 +1,8 @@
-import { Zora1155ABI } from '@/abi/Zora1155';
-import { CHAIN, CONTRACT_ADDRESS, SITE_URL, TOKEN_ID } from '@/config';
-import { kv } from '@vercel/kv';
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  Address,
-  Hex,
-  createPublicClient,
-  createWalletClient,
-  http,
-} from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-
-const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
-const MINTER_PRIVATE_KEY = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
-const HAS_KV = !!process.env.KV_URL;
-
-const transport = http(process.env.RPC_URL);
-
-const publicClient = createPublicClient({
-  chain: CHAIN,
-  transport,
-});
-
-const walletClient = createWalletClient({
-  chain: CHAIN,
-  transport,
-});
-
-export const dynamic = 'force-dynamic';
+import { SITE_URL } from '@/config'
 
 export async function POST(req: NextRequest): Promise<Response> {
+
   try {
     if (!MINTER_PRIVATE_KEY) throw new Error('MINTER_PRIVATE_KEY is not set');
 
@@ -173,3 +146,6 @@ async function validateFrameRequest(data: string | undefined) {
     .then((response) => response.json())
     .catch((err) => console.error(err));
 }
+
+export const dynamic = 'force-dynamic';
+
