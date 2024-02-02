@@ -52,7 +52,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     console.log(buttonIndex);
     console.log(body.untrustedData);
     // Use buttonIndex to determine the response
-    if (buttonIndex === 1) {
+    if (buttonIndex == '1') {
       // If buttonIndex is 1, perform the redirect
       return NextResponse.redirect(`${SITE_URL}/redirect`, { status: 302 });
     } else {
