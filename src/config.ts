@@ -9,10 +9,11 @@ export const TOKEN_ID = 1n; // First collection is 1
 
 export const FRAME_METADATA = getFrameMetadata({
   buttons: [
-    {label: 'Mint', action: 'post_redirect'},
-    {label: 'on', action: 'post_redirect'},
-    {label: 'Zora', action: 'post_redirect'}
-],
+
+    {label: 'Mint token #1 on Zora', action: 'post_redirect'},
+    {label: 'Mint #2'}
+  ],
+
   image: `${SITE_URL}/opengraph-image.png`,
   post_url: `${SITE_URL}/api/frame`,
 });
