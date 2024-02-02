@@ -9,7 +9,7 @@ export const TOKEN_ID = 1n; // First collection is 1
 
 export const FRAME_METADATA = getFrameMetadata({
   buttons: [
-    {label: 'Mint #2'}
+    {label: 'Mint Hexadecimal'}
   ],
 
   image: `${SITE_URL}/opengraph-image.png`,

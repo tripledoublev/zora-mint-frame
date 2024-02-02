@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   Address,
   Hex,
+  TransactionExecutionError,
   createPublicClient,
   createWalletClient,
   http,
@@ -33,6 +34,7 @@ enum ResponseType {
   NFT_NOT_FOUND,
   ALREADY_MINTED,
   NO_ADDRESS,
+  OUT_OF_GAS,
   ERROR,
 }
 
@@ -46,16 +48,6 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     // Access untrustedData from the body
     const untrustedData = body.untrustedData;
-    
-    // Now, extract the buttonIndex from untrustedData
-    const buttonIndex = untrustedData ? untrustedData.buttonIndex : null;
-    console.log(buttonIndex);
-    console.log(body.untrustedData);
-    // Use buttonIndex to determine the response
-   /*  if (buttonIndex == '1') {
-      // If buttonIndex is 1, perform the redirect
-      return NextResponse.redirect(`${SITE_URL}/redirect`, { status: 302 });
-    } else { */
 
     // Check if frame request is valid
     const status = await validateFrameRequest(body.trustedData?.messageBytes);
@@ -118,12 +110,22 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (!request) {
       throw new Error('Could not simulate contract');
     }
+    try {
 
     const hash = await walletClient.writeContract(request);
 
     if (HAS_KV) {
       await kv.set(`mint:${address}`, hash);
     }
+
+  } catch (error) {
+    if (
+      error instanceof TransactionExecutionError &&
+      error.details.startsWith('gas required exceeds allowance')
+    ) {
+      return getResponse(ResponseType.OUT_OF_GAS);
+    }
+  }
 
     return getResponse(ResponseType.SUCCESS);
   
@@ -139,6 +141,7 @@ function getResponse(type: ResponseType) {
     [ResponseType.NFT_NOT_FOUND]: 'status/missing-nft.png',
     [ResponseType.ALREADY_MINTED]: 'status/already-minted.png',
     [ResponseType.NO_ADDRESS]: 'status/no-address.png',
+    [ResponseType.OUT_OF_GAS]: 'status/out-of-gas.png',
     [ResponseType.ERROR]: 'status/error.png',
   }[type];
   const shouldRetry =
