@@ -144,6 +144,7 @@ function getResponse(type: ResponseType) {
     [ResponseType.OUT_OF_GAS]: 'status/out-of-gas.png',
     [ResponseType.ERROR]: 'status/error.png',
   }[type];
+  const isSuccess = type === ResponseType.SUCCESS;
   const shouldRetry =
     type === ResponseType.ERROR || type === ResponseType.NFT_NOT_FOUND;
   return new NextResponse(`<!DOCTYPE html><html><head>
@@ -153,6 +154,13 @@ function getResponse(type: ResponseType) {
     ${
       shouldRetry
         ? `<meta property="fc:frame:button:1" content="Try again" />`
+        : ''
+    }
+    ${
+      isSuccess 
+        ? ` <meta property="fc:frame:button:1" content="View it on Zora" />
+        <meta property="fc:frame:button:1:action" content="link" />
+        <meta property="fc:frame:button:1:target" content="https://zora.co/collect/zora:0x1f1f8f9ab11c6d37170c33d3c04317ef447d47c2/2" />`
         : ''
     }
   </head></html>`);
